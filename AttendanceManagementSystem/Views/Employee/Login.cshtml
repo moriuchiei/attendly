@@ -1,0 +1,43 @@
+﻿@model AttendanceManagementSystem.Models.LoginInputModel
+@{
+    Layout = null;
+    ViewData["Title"] = "ログイン";
+}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ログイン画面</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="login-body">
+        <div class="login-container">
+            <form asp-action="Login" asp-controller="Employee" method="post">
+                <h2>ログイン</h2>
+                @Html.ValidationSummary()
+                <div class="input-group">
+                    <label for="email">メールアドレス</label>
+                    <input type="email" id="email" name="Email" placeholder="email@example.com" required />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="input-group">
+                    <label for="password">パスワード</label>
+                    <input type="password" id="password" name="Password" placeholder="********" required />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <button type="submit">ログイン</button>
+                <p class="signup-link">アカウントをお持ちでない方は <a href="/Employee/RegisterAccount">新規登録</a></p>
+            </form>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+
+</html>

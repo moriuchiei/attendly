@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>勤怠管理画面</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/AttendanceManagementSystem.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo">勤怠管理システム</div>
+        <nav>
+            <ul>
+                <li>
+                    <a asp-controller="AttendanceManagement"
+                       asp-action="Index"
+                       asp-route-employeeId="@ViewData["EmployeeId"]?.ToString()"
+                       asp-route-targetMonth="@DateTime.Now">
+                        日次一覧
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="AttendanceManagement"
+                       asp-action="MonthlySummary"
+                       asp-route-employeeId="@ViewData["EmployeeId"]?.ToString()">
+                        月次一覧
+                    </a>
+                </li>
+                @if(ViewData["AdminFlg"]?.ToString() == "1")
+                {
+                    <li><a asp-controller="AttendanceManagement" asp-action="SelectUser">ユーザー選択（管理者専用）</a></li>
+                }
+            </ul>
+        </nav>
+        <div class="user-menu">
+            <div>ログインユーザー：@ViewData["Name"]</div>
+            <a asp-controller="Employee" asp-action="Logout">ログアウト</a>
+        </div>
+    </div>
+    @RenderBody()
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/attendanceManagementSystem.js" asp-append-version="true"></script>
+</body>
+
+</html>

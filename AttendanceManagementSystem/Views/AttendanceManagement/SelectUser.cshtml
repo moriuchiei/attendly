@@ -1,0 +1,29 @@
+﻿@model SelectUserViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="selectuser-main-content">
+    <header>
+        <h1>一般ユーザー選択</h1>
+        <div class="user-info">
+            <span>管理者：佐藤</span>
+        </div>
+    </header>
+    <div class="user-select-card">
+        <form asp-action="Index" asp-controller="AttendanceManagement" method="get" id="selectuser-form">
+            <input type="hidden" name="TargetMonth" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <div class="user-select-list">
+                @foreach (var employee in Model.EmployeeList)
+                {
+                    <div class="user-select-item">
+                        <input type="radio" name="EmployeeId" value="@employee.EmployeeId" id="user-@employee.EmployeeId" required />
+                        <label for="user-@employee.EmployeeId">@employee.Name（@employee.Department）</label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="user-select-button submitBtn">選択する</button>
+        </form>
+    </div>
+</div>

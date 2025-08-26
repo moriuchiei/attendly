@@ -1,0 +1,81 @@
+﻿@model EditViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="edit-main-content">
+    <header>
+        <h1>日次勤怠入力</h1>
+        <div class="user-info">
+            <a asp-controller="AttendanceManagement"
+               asp-action="Index"
+               asp-route-employeeId="@ViewData["EmployeeId"]"
+               asp-route-targetMonth="@Model.DisplayDate">
+                戻る
+            </a>
+        </div>
+    </header>
+
+    <!-- 入力フォームカード -->
+    <div class="card">
+        <form asp-action="Edit" asp-controller="AttendanceManagement" method="post">
+            <input type="hidden" class="form-control" value="@(Model.Name)" readonly>
+            <input type="hidden" class="form-control" name="EmployeeId" value="@(Model.EmployeeId)" readonly required>
+
+            <div class="form-group">
+                <label class="form-label">日付</label>
+                <input type="date" class="form-control" name="DisplayDate" value="@(Model.DisplayDate.ToString("yyyy-MM-dd"))"
+                       @(Model.ApprovalStatus == ApprovalStatus.承認済み ? "readonly" : "") required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">勤務区分</label>
+                @{
+                    if (Model.ApprovalStatus == ApprovalStatus.承認済み)
+                    {
+                        <select asp-for="WorkStatus"
+                                asp-items="Html.GetEnumSelectList<WorkStatus>()"
+                                class="form-control" disabled required>
+                        </select>
+                    }
+                    else
+                    {
+                        <select asp-for="WorkStatus"
+                                asp-items="Html.GetEnumSelectList<WorkStatus>()"
+                                class="form-control" required>
+                        </select>
+                    }
+                }
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">出勤・退勤時刻</label>
+                <div class="time-range">
+                    <input type="time" class="form-control" name="StartTime" value="@(Model.StartTime != DateTime.MinValue ? Model.StartTime.ToString("HH:mm") : "09:00")"
+                           @(Model.ApprovalStatus == ApprovalStatus.承認済み ? "readonly" : "") required>
+                    <span>〜</span>
+                    <input type="time" class="form-control" name="EndTime" value="@(Model.EndTime != DateTime.MinValue ? Model.EndTime.ToString("HH:mm") : "18:00")"
+                           @(Model.ApprovalStatus == ApprovalStatus.承認済み ? "readonly" : "") required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">備考</label>
+                <input type="text" class="form-control" name="Note" value="@Model.Note">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">承認ステータス</label>
+                <input type="text" class="form-control" value="@(Model.ApprovalStatus)" readonly required>
+            </div>
+
+            <button type="submit" class="submit-btn submitBtn">登録する</button>
+        </form>
+    </div>
+</div>
+
+@* ローディング *@
+<div id="loadingOverlay">
+    <div class="spinner"></div>
+</div>

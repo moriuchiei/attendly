@@ -1,0 +1,34 @@
+﻿@model MonthlySummaryViewModel
+
+<div class="main-content">
+    <header>
+        <h1 class="">月次勤怠一覧</h1>
+    </header>
+    <section class="attendance-table mt-4 me-4">
+        <table class="work-monthly-table">
+            <thead>
+                <tr>
+                    <th>月</th>
+                    <th>出勤日数</th>
+                    <th>欠勤日数</th>
+                    <th>有給休暇日数</th>
+                    <th>残業時間合計</th>
+                    <th>未承認日数</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.MonthlyRows)
+                {
+                    <tr>
+                        <td>@row.Month 月</td>
+                        <td>@row.WorkDays</td>
+                        <td>@row.AbsenceDays</td>
+                        <td>@row.PaidLeaveDays</td>
+                        <td>@(row.TotalOvertime.TotalHours.ToString("0.0")) 時間</td>
+                        <td>@row.UnapprovedDays</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>

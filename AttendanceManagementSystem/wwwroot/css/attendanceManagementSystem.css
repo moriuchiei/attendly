@@ -1,0 +1,403 @@
+﻿/*リセットcss----------------------------------------------*/
+* {
+    box-sizing: border-box;
+}
+
+/*共通部分css----------------------------------------------*/
+body {
+    margin: 0;
+    font-family: sans-serif;
+    display: flex;
+    min-height: 100vh;
+    background: #f5f6fa;
+}
+
+.sidebar {
+    position: fixed;
+    height: 100vh;
+    background-color: #1f2f46;
+    color: #fff;
+    width: 200px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+    .sidebar .logo {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 40px;
+    }
+
+    .sidebar nav ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .sidebar nav ul li {
+            margin-bottom: 20px;
+        }
+
+            .sidebar nav ul li a {
+                color: #fff;
+                text-decoration: none;
+            }
+
+    .sidebar .user-menu {
+        margin-top: auto;
+    }
+
+        .sidebar .user-menu a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+
+#loadingOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.disabled-btn {
+    background-color: #ccc !important;
+    color: #666 !important;
+    cursor: not-allowed !important;
+    border: none;
+    opacity: 0.7;
+}
+
+
+
+
+/*AttendanceManagement/Index----------------------------------------------*/
+.main-content {
+    flex: 1;
+    background: #f5f6fa;
+    padding: 20px 40px;
+    margin-left: 200px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    header h1 {
+        margin: 0;
+    }
+
+    header .user-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    header button {
+        background: #3f88c5;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+.filter-bar {
+    margin: 20px 0;
+}
+
+    .filter-bar select,
+    .filter-bar button {
+        padding: 8px 12px;
+        margin-right: 10px;
+    }
+
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stats {
+    margin-bottom: 20px;
+}
+
+.attendance-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.attendance-table th,
+.attendance-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    width: 11%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+    .attendance-table table th:nth-child(8),
+    .attendance-table table td:nth-child(8) {
+        width: 24%;
+        text-align: left;
+    }
+
+.attendance-table .holiday {
+    background-color: #f9eaea;
+}
+
+.attendance-table button {
+    background: #3f88c5;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.attendance-table tr.saturday {
+    background-color: #e0f0ff;
+}
+
+.attendance-table tr.sunday {
+    background-color: #ffe0e0;
+}
+
+.attendance-table tr.holiday {
+    background-color: #ffe0e0;
+}
+
+
+/*AttendanceManagement/Edit----------------------------------------------*/
+.edit-main-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 200px;
+}
+
+.edit-main-content header {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.edit-main-content header h1 {
+    font-size: 22px;
+    color: #333;
+}
+
+/* === カードデザイン === */
+.card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 600px;
+}
+
+/* === フォームデザイン === */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: 0.3s;
+    background: #fafafa;
+}
+
+    .form-control:focus {
+        border-color: #4e54c8;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.15);
+        outline: none;
+    }
+
+    .form-control[readonly] {
+        background: #eee;
+        color: #666;
+    }
+
+.time-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .time-range input {
+        flex: 1;
+        min-width: 120px;
+    }
+
+/* === 登録ボタン === */
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #4e54c8;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+    .submit-btn:hover {
+        background: #3c41a3;
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+
+
+/*AttendanceManagement/SelectUser----------------------------------------------*/
+.selectuser-main-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selectuser-main-content header {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .selectuser-main-content header h1 {
+        font-size: 22px;
+        color: #333;
+    }
+
+.user-select-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 600px;
+}
+
+.user-select-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.user-select-item {
+    display: flex;
+    align-items: center;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
+}
+
+    .user-select-item:hover {
+        background-color: #eef1ff;
+    }
+
+    .user-select-item input[type="radio"] {
+        margin-right: 12px;
+        transform: scale(1.2);
+    }
+
+.user-select-button {
+    width: 100%;
+    padding: 14px;
+    background: #4e54c8;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+    .user-select-button:hover {
+        background-color: #3c41a3;
+    }
+
+
+
+/*AttendanceManagement/MonthlySummary----------------------------------------------*/
+.work-monthly-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .work-monthly-table th,
+    .work-monthly-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .work-monthly-table th {
+        background-color: #f0f0f0;
+    }
+
+    .work-monthly-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }

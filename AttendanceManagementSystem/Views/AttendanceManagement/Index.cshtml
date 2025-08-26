@@ -1,0 +1,129 @@
+﻿@model DailyViewModel
+
+@{
+    Layout = "_Layout";
+}
+<form asp-action="Approve" asp-controller="AttendanceManagement" method="post" id="approve-form">
+    <input type="hidden" asp-for="EmployeeId" />
+    <input id="input-display-date" type="hidden" name="DisplayDate" value="" />
+</form>
+<div class="main-content me-2">
+    <header>
+        <h1>日次勤怠一覧</h1>
+        <div class="user-info">
+            <form method="get" asp-action="ExportCsv" asp-controller="AttendanceManagement">
+                <input type="hidden" name="employeeId" value="@Model.EmployeeId" />
+                <input type="hidden" name="targetMonth" value="@Model.TargetMonth.ToString("yyyy-MM-dd")" />
+                <button type="submit" class="btn btn-primary submitBtn">CSV出力</button>
+            </form>
+        </div>
+    </header>
+    <div class="filter-bar">
+    <form asp-action="Index" asp-controller="AttendanceManagement" method="get" class="search-form">
+        <input type="hidden" asp-for="EmployeeId" />
+            <select name="TargetMonth">
+                @foreach (var month in Model.MonthList)
+                {
+                    if (month.Month == Model.TargetMonth.Month)
+                    {
+                        <option value="@month.ToString("yyyy-MM-dd")" selected>
+                            @month.ToString("yyyy年MM月")
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@month.ToString("yyyy-MM-dd")">
+                            @month.ToString("yyyy年MM月")
+                        </option>
+                    }
+                }
+            </select>
+            <button type="submit" class="btn btn-primary submitBtn">検索</button>
+    </form>
+    </div>
+
+    <section class="attendance-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>勤務状況</th>
+                    <th>勤務開始時間</th>
+                    <th>勤務終了時間</th>
+                    <th>平日勤務時間</th>
+                    <th>休祝日勤務時間</th>
+                    <th>残業時間</th>
+                    <th>備考</th>
+                    <th>承認ステータス</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dailyRecord in Model.DailyRecord)
+                {
+                    bool approveFlg = false;
+                    if (ViewData["AdminFlg"]?.ToString() == "1" && dailyRecord.ApprovalStatus != ApprovalStatus.承認済み && dailyRecord.WorkStatus != WorkStatus.未設定)
+                    {
+                        approveFlg = true;
+                    }      
+                    string rowClass = string.Empty;
+                    // 背景用クラスを判定                    
+                    if (dailyRecord.DisplayDate.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        rowClass = "sunday";
+                    }
+                    else if (dailyRecord.DisplayDate.DayOfWeek == DayOfWeek.Saturday)
+                    {
+                        rowClass = "saturday";
+                    }
+
+                    // 祝日の場合そちらを優先
+                    if (dailyRecord.NationalHolidayFlg)
+                    {
+                        rowClass = "holiday";
+                    }
+                    <tr class="@rowClass">
+                        <td>
+                            @{
+                                if (dailyRecord.ApprovalStatus == ApprovalStatus.承認済み)
+                                {
+                                    @dailyRecord.DisplayDate.ToString("MM/dd(ddd)");
+                                }
+                                else
+                                {
+                                    <a asp-controller="AttendanceManagement"
+                                       asp-action="Edit"
+                                       asp-route-employeeId="@Model.EmployeeId"
+                                       asp-route-targetDate="@dailyRecord.DisplayDate">
+                                        @dailyRecord.DisplayDate.ToString("MM/dd(ddd)")
+                                    </a>
+                                }
+                            }                            
+                        </td>
+                        <td>@(dailyRecord.WorkStatus == WorkStatus.未設定 ? "" : dailyRecord.WorkStatus.ToString())</td>
+                        <td>@(dailyRecord.StartTime == DateTime.MinValue ? "" : dailyRecord.StartTime.ToString("HH:mm"))</td>
+                        <td>@(dailyRecord.EndTime == DateTime.MinValue ? "" : dailyRecord.EndTime.ToString("HH:mm"))</td>
+                        <td>@(dailyRecord.WorkStatus == WorkStatus.未設定 ? "" : dailyRecord.WorkTime.ToString("hh\\:mm"))</td>
+                        <td>@(dailyRecord.WorkStatus == WorkStatus.未設定 ? "" : dailyRecord.HolidayWorkTime.ToString("hh\\:mm"))</td>
+                        <td>@(dailyRecord.WorkStatus == WorkStatus.未設定 ? "" : dailyRecord.Overtime.ToString("hh\\:mm"))</td>
+                        <td>@dailyRecord.Note</td>
+                        @{
+                            if (approveFlg)
+                            {
+                                <td class="p-0"><button class="btn btn-primary ApprovalBtn submitBtn" data-date="@dailyRecord.DisplayDate">承認</button></td>
+                            }
+                            else
+                            {
+                                <td>@(dailyRecord.WorkStatus == WorkStatus.未設定 ? "" : dailyRecord.ApprovalStatus.ToString())</td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+@* ローディング *@
+<div id="loadingOverlay">
+    <div class="spinner"></div>
+</div>

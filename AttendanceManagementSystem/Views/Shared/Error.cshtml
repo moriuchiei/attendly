@@ -1,0 +1,24 @@
+﻿@model ErrorViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "エラー";
+}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="error-container">
+        <p class="error-message">申し訳ありません。<br>処理中に問題が発生しました。</p>
+
+        <a asp-controller="Employee" asp-action="Logout" class="back-button">
+            ログイン画面に戻る
+        </a>
+    </div>
+</body>
+</html>
